@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>وصف الشخصيات الأدبية - الصف الخامس</title>
     <style>
+        /* نفس الستايل السابق */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -19,94 +19,50 @@
             min-height: 100vh;
             padding: 20px;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-
         .header {
             text-align: center;
             color: white;
             margin-bottom: 30px;
         }
-
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
-            margin-bottom: 30px;
         }
-
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
         }
-
         .card {
             background: white;
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card h2 {
-            color: #4a5568;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
-        }
-
         .form-group {
             margin-bottom: 20px;
         }
-
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #4a5568;
         }
-
         input, textarea, select {
             width: 100%;
             padding: 12px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
             font-size: 16px;
-            transition: border-color 0.3s ease;
-            font-family: inherit;
         }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
         .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -114,153 +70,38 @@
             padding: 15px 30px;
             border-radius: 8px;
             font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
             width: 100%;
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: #718096;
-            margin-top: 10px;
-        }
-
-        .btn-secondary:hover {
-            background: #4a5568;
-        }
-
         .message {
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
-            font-weight: 600;
         }
-
         .success {
             background: #c6f6d5;
             color: #22543d;
-            border: 2px solid #48bb78;
         }
-
         .error {
             background: #fed7d7;
             color: #742a2a;
-            border: 2px solid #f56565;
         }
-
         .works-container {
             display: grid;
             gap: 20px;
             margin-top: 20px;
         }
-
         .student-work {
             background: #f7fafc;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
             padding: 20px;
-            transition: all 0.3s ease;
         }
-
-        .student-work:hover {
-            border-color: #667eea;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .student-name {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-
-        .student-work div {
-            margin-bottom: 8px;
-            color: #4a5568;
-        }
-
-        .student-work strong {
-            color: #2d3748;
-        }
-
-        .work-date {
-            font-size: 0.9rem;
-            color: #718096;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #718096;
-            font-size: 1.1rem;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #667eea;
-            font-size: 1.1rem;
-        }
-
-        .instructions {
-            background: #f0fff4;
-            border: 2px solid #48bb78;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .instructions h3 {
-            color: #22543d;
-            margin-bottom: 10px;
-        }
-
-        .instructions ul {
-            list-style: none;
-            padding-right: 20px;
-        }
-
-        .instructions li {
-            margin-bottom: 8px;
-            position: relative;
-        }
-
-        .instructions li:before {
-            content: "•";
-            color: #48bb78;
-            font-weight: bold;
-            display: inline-block;
-            width: 1em;
-            margin-right: 10px;
-        }
-
         .class-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-        }
-
-        @media (max-width: 480px) {
-            .class-section {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -268,210 +109,126 @@
     <div class="container">
         <div class="header">
             <h1>📖 وصف الشخصيات الأدبية</h1>
-            <p>الصف الخامس - منصة تحليل الشخصيات في النصوص الأدبية</p>
-        </div>
-
-        <div class="instructions">
-            <h3>🎯 كيفية استخدام المنصة:</h3>
-            <ul>
-                <li>املأ النموذج ببيانات الشخصية التي قمت بتحليلها</li>
-                <li>أضف الصفات الجسدية والنفسية مع الدليل النصي</li>
-                <li>شاهد أعمالك وأعمال زملائك في القسم أدناه</li>
-                <li>يمكنك تحديث القائمة في أي وقت</li>
-            </ul>
+            <p>الصف الخامس - درس رصف الشخصية</p>
         </div>
 
         <div class="main-content">
-            <!-- نموذج الإرسال -->
             <div class="card">
                 <h2>✍️ إضافة تحليل جديد</h2>
                 <form id="characterForm">
                     <div class="form-group">
                         <label for="studentName">اسم الطالب</label>
-                        <input type="text" id="studentName" required placeholder="أدخل اسمك الكامل">
+                        <input type="text" id="studentName" required>
                     </div>
 
                     <div class="form-group class-section">
                         <div>
                             <label for="studentClass">الصف</label>
                             <select id="studentClass" required>
-                                <option value="">اختر الصف</option>
                                 <option value="الصف الخامس" selected>الصف الخامس</option>
                             </select>
                         </div>
                         <div>
                             <label for="studentSection">الشعبة</label>
                             <select id="studentSection" required>
-                                <option value="">اختر الشعبة</option>
-                                <option value="الشعبة 1">الشعبة 1</option>
-                                <option value="الشعبة 2">الشعبة 2</option>
-                                <option value="الشعبة 3">الشعبة 3</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="characterName">اسم الشخصية</label>
-                        <input type="text" id="characterName" required placeholder="اسم الشخصية من النص">
+                        <input type="text" id="characterName" required>
                     </div>
 
                     <div class="form-group">
                         <label for="physicalTraits">الصفات الجسدية</label>
-                        <textarea id="physicalTraits" required placeholder="صف المظهر الخارجي للشخصية..."></textarea>
+                        <textarea id="physicalTraits" required></textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="psychologicalTraits">الصفات النفسية</label>
-                        <textarea id="psychologicalTraits" required placeholder="صف الطباع والسلوك والدوافع..."></textarea>
+                        <textarea id="psychologicalTraits" required></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="textEvidence">الدليل من النص (اختياري)</label>
-                        <textarea id="textEvidence" placeholder="أدليل أو اقتباسات تدعم تحليلك..."></textarea>
+                        <label for="textEvidence">الدليل من النص</label>
+                        <textarea id="textEvidence"></textarea>
                     </div>
 
                     <button type="submit" class="btn">إرسال الوصف</button>
                 </form>
 
                 <div id="successMessage" class="message success" style="display: none;">
-                    ✅ تم إرسال التحليل بنجاح!
+                    ✅ تم الإرسال بنجاح!
                 </div>
-
                 <div id="errorMessage" class="message error" style="display: none;">
-                    ❌ حدث خطأ في الإرسال
+                    ❌ حدث خطأ
                 </div>
             </div>
 
-            <!-- عرض الأعمال -->
             <div class="card">
-                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 20px;">
-                    <h2>📚 الأعمال المقدمة</h2>
-                    <button id="refreshBtn" class="btn btn-secondary" style="width: auto; padding: 10px 20px;">
-                        🔄 تحديث
-                    </button>
-                </div>
-                <div id="worksContainer" class="works-container">
-                    <div class="loading">⏳ جارٍ تحميل الأعمال...</div>
+                <h2>📚 الأعمال المقدمة</h2>
+                <button id="refreshBtn" class="btn" style="background: #718096; margin-bottom: 20px;">
+                    🔄 تحديث القائمة
+                </button>
+                <div id="worksContainer">
+                    ⏳ جارٍ التحميل...
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 🔗 رابط Google Apps Script
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwWa-cdzxp6LJWv0B_FKkIBkl7PRc7iFLTJk2Q01ZTZal_xO4OD10z2xiophZu0MVo/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzfUUmqYlV0EYuOPP5zGnyMAu0lx291XzsMR7sc_VVWeBKKW21qHsi8umsDHxGQqkfv/exec";
 
-        // مراجع العناصر
         const form = document.getElementById("characterForm");
         const worksContainer = document.getElementById("worksContainer");
         const successMsg = document.getElementById("successMessage");
         const errorMsg = document.getElementById("errorMessage");
         const refreshBtn = document.getElementById("refreshBtn");
 
-        // حقول النموذج
-        const studentClassEl = document.getElementById("studentClass");
-        const studentSectionEl = document.getElementById("studentSection");
-        const studentNameEl = document.getElementById("studentName");
-        const characterNameEl = document.getElementById("characterName");
-        const physicalTraitsEl = document.getElementById("physicalTraits");
-        const psychologicalTraitsEl = document.getElementById("psychologicalTraits");
-        const textEvidenceEl = document.getElementById("textEvidence");
-
-        // تحميل الأعمال مع إصلاح مشكلة Fetch
         async function loadWorks() {
-            worksContainer.innerHTML = '<div class="loading">⏳ جارٍ تحميل الأعمال...</div>';
+            worksContainer.innerHTML = "⏳ جارٍ تحميل الأعمال...";
             try {
-                // إضافة timestamp لمنع الكاش
-                const url = scriptURL + '?action=getData&t=' + new Date().getTime();
-                console.log('Fetching from:', url);
-                
-                const res = await fetch(url, {
-                    method: 'GET',
-                    mode: 'no-cors', // إضافة no-cors لتجنب مشاكل CORS
-                    cache: 'no-cache'
-                });
-                
-                console.log("Response status:", res.status, res.type);
-                
-                // مع no-cors لن نتمكن من قراءة الرد، لذا نستخدم طريقة بديلة
-                await loadWorksAlternative();
-                
-            } catch (err) {
-                console.error("Load error:", err);
-                await loadWorksAlternative();
-            }
-        }
-
-        // طريقة بديلة لتحميل البيانات
-        async function loadWorksAlternative() {
-            try {
-                // استخدام طريقة مباشرة مع التعامل مع الأخطاء
-                const url = scriptURL + '?action=getData&t=' + new Date().getTime();
+                const url = scriptURL + '?t=' + new Date().getTime();
                 const res = await fetch(url);
                 
-                if (!res.ok) {
-                    throw new Error(`خطأ في السيرفر: ${res.status}`);
-                }
+                if (!res.ok) throw new Error(`خطأ: ${res.status}`);
                 
                 const data = await res.json();
-                displayWorks(data);
                 
-            } catch (err) {
-                console.error("Alternative load error:", err);
-                worksContainer.innerHTML = `
-                    <div class="empty-state">
-                        ⚠️ لا يمكن تحميل البيانات حالياً
-                        <br><small>${err.message}</small>
-                        <br><small>قد يكون السكربت قيد التحديث</small>
-                    </div>
-                `;
-            }
-        }
+                if (!data || data.length === 0) {
+                    worksContainer.innerHTML = '<div style="text-align:center; padding:40px; color:#718096;">لا توجد أعمال بعد</div>';
+                    return;
+                }
 
-        // عرض الأعمال
-        function displayWorks(data) {
-            if (!data || data.length === 0) {
-                worksContainer.innerHTML = '<div class="empty-state">📝 لا توجد أعمال مضافة بعد. كن أول من يضيف تحليل!</div>';
-                return;
-            }
-
-            // معالجة البيانات لتكون متسقة
-            const works = data.map(item => ({
-                student_name: item.student_name || item.name || "غير معروف",
-                student_class: item.student_class || item.class || "الصف الخامس",
-                student_section: item.student_section || item.section || "",
-                character_name: item.character_name || item.character || "غير محدد",
-                physical_traits: item.physical_traits || item.physical || "",
-                psychological_traits: item.psychological_traits || item.psychological || "",
-                text_evidence: item.text_evidence || item.evidence || "",
-                created_at: item.created_at || item.timestamp || item.date || new Date().toISOString()
-            }));
-
-            worksContainer.innerHTML = works
-                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-                .map(w => `
+                worksContainer.innerHTML = data.map(w => `
                     <div class="student-work">
-                        <div class="student-name">
-                            👤 ${w.student_name} 
-                            ${w.student_section ? `- ${w.student_section}` : ''}
+                        <div style="font-weight:bold; margin-bottom:10px;">
+                            👤 ${w.student_name} - الصف ${w.student_class} - شعبة ${w.student_section}
                         </div>
                         <div><strong>الشخصية:</strong> ${w.character_name}</div>
-                        <div><strong>الصفات الجسدية:</strong> ${w.physical_traits || "غير محدد"}</div>
-                        <div><strong>الصفات النفسية:</strong> ${w.psychological_traits || "غير محدد"}</div>
-                        ${w.text_evidence ? `<div><strong>الدليل النصي:</strong> "${w.text_evidence}"</div>` : ""}
-                        <div class="work-date">📅 ${new Date(w.created_at).toLocaleDateString("ar-SA", {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        })}</div>
+                        <div><strong>الصفات الجسدية:</strong> ${w.physical_traits}</div>
+                        <div><strong>الصفات النفسية:</strong> ${w.psychological_traits}</div>
+                        ${w.text_evidence ? `<div><strong>الدليل:</strong> ${w.text_evidence}</div>` : ''}
+                        <div style="margin-top:10px; font-size:0.9em; color:#718096;">
+                            📅 ${new Date(w.created_at).toLocaleDateString('ar-SA')}
+                        </div>
                     </div>
-                `).join("");
+                `).join('');
+
+            } catch (err) {
+                worksContainer.innerHTML = `<div style="text-align:center; padding:20px; color:#e53e3e;">
+                    ⚠️ خطأ في التحميل: ${err.message}
+                </div>`;
+            }
         }
 
-        // إرسال البيانات
         async function submitWork(payload) {
             try {
-                // طريقة 1: استخدام FormData
                 const formData = new FormData();
                 Object.keys(payload).forEach(key => {
                     formData.append(key, payload[key]);
@@ -482,41 +239,15 @@
                     body: formData
                 });
 
-                console.log('Submit response status:', response.status);
-                
-                if (response.ok) {
-                    return true;
-                } else {
-                    throw new Error(`خطأ في الإرسال: ${response.status}`);
-                }
+                const result = await response.text();
+                return response.ok;
                 
             } catch (error) {
-                console.error('Submission error:', error);
-                
-                // طريقة بديلة: استخدام x-www-form-urlencoded
-                try {
-                    const urlEncoded = new URLSearchParams();
-                    Object.keys(payload).forEach(key => {
-                        urlEncoded.append(key, payload[key]);
-                    });
-
-                    const response2 = await fetch(scriptURL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: urlEncoded
-                    });
-
-                    return response2.ok;
-                } catch (error2) {
-                    console.error('Alternative submission error:', error2);
-                    return false;
-                }
+                console.error('Error:', error);
+                return false;
             }
         }
 
-        // حدث الإرسال
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             successMsg.style.display = "none";
@@ -527,52 +258,26 @@
             btn.textContent = "جاري الإرسال...";
 
             const payload = {
-                student_name: studentNameEl.value.trim(),
-                student_class: studentClassEl.value.trim(),
-                student_section: studentSectionEl.value.trim(),
-                character_name: characterNameEl.value.trim(),
-                physical_traits: physicalTraitsEl.value.trim(),
-                psychological_traits: psychologicalTraitsEl.value.trim(),
-                text_evidence: textEvidenceEl.value.trim()
+                student_name: document.getElementById("studentName").value.trim(),
+                student_class: document.getElementById("studentClass").value.trim(),
+                student_section: document.getElementById("studentSection").value.trim(),
+                character_name: document.getElementById("characterName").value.trim(),
+                physical_traits: document.getElementById("physicalTraits").value.trim(),
+                psychological_traits: document.getElementById("psychologicalTraits").value.trim(),
+                text_evidence: document.getElementById("textEvidence").value.trim()
             };
-
-            // تحقق من الحقول المطلوبة
-            const requiredFields = [
-                { field: studentNameEl, name: "اسم الطالب" },
-                { field: studentClassEl, name: "الصف" },
-                { field: studentSectionEl, name: "الشعبة" },
-                { field: characterNameEl, name: "اسم الشخصية" },
-                { field: physicalTraitsEl, name: "الصفات الجسدية" },
-                { field: psychologicalTraitsEl, name: "الصفات النفسية" }
-            ];
-
-            const missingFields = requiredFields.filter(item => !item.field.value.trim());
-
-            if (missingFields.length > 0) {
-                errorMsg.textContent = `❌ يرجى ملء الحقول التالية: ${missingFields.map(f => f.name).join('، ')}`;
-                errorMsg.style.display = "block";
-                btn.disabled = false;
-                btn.textContent = "إرسال الوصف";
-                return;
-            }
 
             const ok = await submitWork(payload);
 
             if (ok) {
-                successMsg.textContent = "✅ تم إرسال التحليل بنجاح! جاري التحديث...";
                 successMsg.style.display = "block";
                 form.reset();
-                
-                // انتظر قليلاً ثم حدث القائمة
                 setTimeout(() => {
                     loadWorks();
-                }, 2000);
-                
-                setTimeout(() => {
                     successMsg.style.display = "none";
-                }, 5000);
+                }, 2000);
             } else {
-                errorMsg.textContent = "❌ لم يتم الإرسال. تحقق من اتصال الإنترنت وحاول مرة أخرى.";
+                errorMsg.textContent = "❌ فشل في الإرسال. تحقق من الاتصال.";
                 errorMsg.style.display = "block";
             }
 
@@ -580,22 +285,8 @@
             btn.textContent = "إرسال الوصف";
         });
 
-        // زر تحديث الأعمال
-        refreshBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            loadWorks();
-        });
-
-        // تحميل أولي عند فتح الصفحة
-        document.addEventListener("DOMContentLoaded", () => {
-            loadWorks();
-        });
-
-        // تحديث تلقائي كل 45 ثانية
-        setInterval(loadWorks, 45000);
-
-        // إعداد افتراضي للصف الخامس
-        studentClassEl.value = "الصف الخامس";
+        refreshBtn.addEventListener("click", loadWorks);
+        document.addEventListener("DOMContentLoaded", loadWorks);
     </script>
 </body>
 </html>
