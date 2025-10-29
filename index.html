@@ -1,154 +1,35 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>درس وصف الشخصية</title>
-<style>
-  body {
-    font-family: "Cairo", sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    margin: 0;
-    padding: 20px;
-    color: #2d3748;
-  }
-  .container {
-    max-width: 900px;
-    margin: auto;
-    background: #fff;
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  }
-  h1 {
-    text-align: center;
-    color: #4f46e5;
-  }
-  .form-group { margin-bottom: 15px; }
-  label { font-weight: bold; display:block; margin-bottom:5px;}
-  input, textarea, select {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-family: inherit;
-  }
-  button {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    color: #fff;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 100%;
-  }
-  button:hover { opacity: 0.9; }
-  .success-msg, .error-msg {
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 15px;
-    display: none;
-  }
-  .success-msg { background: #c6f6d5; color: #22543d; }
-  .error-msg { background: #fed7d7; color: #742a2a; }
-  .student-work {
-    background: #f0fff4;
-    border: 2px solid #48bb78;
-    border-radius: 10px;
-    padding: 15px;
-    margin-top: 15px;
-  }
-  .student-name {
-    font-weight: bold;
-    color: #2f855a;
-  }
-  .empty-state {
-    text-align: center;
-    color: #718096;
-    margin-top: 30px;
-  }
-  .refresh-btn {
-    display:inline-block;
-    background:#4f46e5;
-    color:white;
-    padding:8px 15px;
-    border-radius:8px;
-    text-decoration:none;
-    margin-top:10px;
-  }
-</style>
-</head>
-<body>
-<div class="container">
-  <h1>🖋️ درس: وصف الشخصية</h1>
-  <p style="text-align:center;">إعداد: <strong>الأستاذ خليل البلوشي</strong> – الصف الخامس الأساسي</p>
-  
-  <h2>✍️ النشاط التطبيقي</h2>
-  <form id="characterForm">
-    <div class="form-group">
-      <label>الشعبة:</label>
-      <select id="studentClass" required>
-        <option value="">اختر الشعبة</option>
-        <option>الخامس - 1</option>
-        <option>الخامس - 2</option>
-        <option>الخامس - 3</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>اسم الطالب:</label>
-      <input type="text" id="studentName" placeholder="اكتب اسمك هنا..." required />
-    </div>
-    <div class="form-group">
-      <label>اسم الشخصية:</label>
-      <input type="text" id="characterName" placeholder="مثال: والدي، فاطمة، أحمد..." required />
-    </div>
-    <div class="form-group">
-      <label>الصفات الجسدية (المادية):</label>
-      <textarea id="physicalTraits" placeholder="مثال: طويل القامة، له شعر أسود..." required></textarea>
-    </div>
-    <div class="form-group">
-      <label>الصفات النفسية (المعنوية):</label>
-      <textarea id="psychologicalTraits" placeholder="مثال: كريم، صبور، ذكي..." required></textarea>
-    </div>
-    <div class="form-group">
-      <label>الأدلة أو المواقف:</label>
-      <textarea id="textEvidence" placeholder="مثال: ساعد زملاءه في الصف..."></textarea>
-    </div>
-    <button type="submit">إرسال الوصف</button>
-  </form>
-
-  <div id="successMessage" class="success-msg">✅ تم إرسال وصفك بنجاح!</div>
-  <div id="errorMessage" class="error-msg">⚠️ حدث خطأ أثناء الإرسال. حاول مرة أخرى.</div>
-
-  <h2 style="margin-top:40px;">🌟 أعمال الطلاب</h2>
-  <a href="#" id="refreshBtn" class="refresh-btn">🔄 تحديث الأعمال</a>
-  <div id="worksContainer" class="empty-state">لم يتم إرسال أي أعمال بعد.</div>
-
-  <div style="text-align:center;margin-top:30px;">
-    <a href="https://docs.google.com/spreadsheets/" target="_blank" style="text-decoration:none;color:#4f46e5;font-weight:bold;">📊 عرض جدول Google Sheet</a>
-  </div>
-</div>
-
 <script>
-// 🔗 رابط Google Apps Script الجديد
+// 🔗 رابط Google Apps Script (تأكد أنه أحدث رابط ينتهي بـ /exec)
 const scriptURL = "https://script.google.com/macros/s/AKfycby9r2Lz_qLHjeZP0njaNgOyu0NdZjVblVYcEZk_d6htkwlc3nbA7plPZrmWy9IhjNHH/exec";
 
-// تحميل أعمال الطلاب
+// مراجع العناصر
+const form = document.getElementById("characterForm");
+const worksContainer = document.getElementById("worksContainer");
+const successMsg = document.getElementById("successMessage");
+const errorMsg = document.getElementById("errorMessage");
+const refreshBtn = document.getElementById("refreshBtn");
+
+// حقول النموذج
+const studentClassEl = document.getElementById("studentClass");
+const studentNameEl = document.getElementById("studentName");
+const characterNameEl = document.getElementById("characterName");
+const physicalTraitsEl = document.getElementById("physicalTraits");
+const psychologicalTraitsEl = document.getElementById("psychologicalTraits");
+const textEvidenceEl = document.getElementById("textEvidence");
+
+// تحميل الأعمال مع منع الكاش
 async function loadWorks() {
-  const container = document.getElementById("worksContainer");
-  container.innerHTML = "⏳ جارٍ تحميل الأعمال...";
+  worksContainer.innerHTML = "⏳ جارٍ تحميل الأعمال...";
   try {
-    const res = await fetch(scriptURL);
+    const res = await fetch(scriptURL, { cache: "no-store" });
     const data = await res.json();
 
-    if (data.length === 0) {
-      container.innerHTML = '<div class="empty-state">لم يتم إرسال أي أعمال بعد.</div>';
+    if (!Array.isArray(data) || data.length === 0) {
+      worksContainer.innerHTML = '<div class="empty-state">لم يتم إرسال أي أعمال بعد.</div>';
       return;
     }
 
-    container.innerHTML = data
+    worksContainer.innerHTML = data
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       .map(w => `
         <div class="student-work">
@@ -156,4 +37,95 @@ async function loadWorks() {
           <div><strong>الشخصية:</strong> ${w.character_name}</div>
           <div><strong>الصفات الجسدية:</strong> ${w.physical_traits}</div>
           <div><strong>الصفات النفسية:</strong> ${w.psychological_traits}</div>
-          ${w.text_evidence ? `<div><strong>الدليل:</strong> ${w.tex_
+          ${w.text_evidence ? `<div><strong>الدليل:</strong> ${w.text_evidence}</div>` : ""}
+          <div style="font-size:0.8rem;color:#718096;">📅 ${new Date(w.created_at).toLocaleDateString("ar-SA")}</div>
+        </div>
+      `).join("");
+  } catch (err) {
+    console.error("Load error:", err);
+    worksContainer.innerHTML = '<div class="empty-state">⚠️ لم يمكن تحميل البيانات.</div>';
+  }
+}
+
+// إرسال مع مسارين: JSON أولاً، وإن فشل جرّب text/plain لتفادي Preflight أحيانًا
+async function submitWork(payload) {
+  // المحاولة 1: JSON تقليدية
+  try {
+    const r1 = await fetch(scriptURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    if (r1.ok) return true;
+  } catch (e) {
+    // ننتقل للمحاولة 2
+  }
+
+  // المحاولة 2: text/plain (تساعد في بعض بيئات CORS)
+  try {
+    const r2 = await fetch(scriptURL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    if (r2.ok) return true;
+  } catch (e) {
+    console.error("Submit error:", e);
+  }
+
+  return false;
+}
+
+// حدث الإرسال
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  successMsg.style.display = "none";
+  errorMsg.style.display = "none";
+
+  const btn = form.querySelector("button[type='submit']");
+  btn.disabled = true;
+  btn.textContent = "جاري الإرسال...";
+
+  const payload = {
+    student_name: studentNameEl.value.trim(),
+    student_class: studentClassEl.value.trim(),
+    character_name: characterNameEl.value.trim(),
+    physical_traits: physicalTraitsEl.value.trim(),
+    psychological_traits: psychologicalTraitsEl.value.trim(),
+    text_evidence: textEvidenceEl.value.trim()
+  };
+
+  // تحقق سريع من الحقول
+  if (!payload.student_name || !payload.student_class || !payload.character_name || !payload.physical_traits || !payload.psychological_traits) {
+    errorMsg.textContent = "يرجى ملء جميع الحقول المطلوبة.";
+    errorMsg.style.display = "block";
+    btn.disabled = false;
+    btn.textContent = "إرسال الوصف";
+    return;
+  }
+
+  const ok = await submitWork(payload);
+
+  if (ok) {
+    successMsg.style.display = "block";
+    form.reset();
+    await loadWorks();
+    setTimeout(() => successMsg.style.display = "none", 4000);
+  } else {
+    errorMsg.textContent = "⚠️ لم يتم الإرسال. تحقّق من نشر السكربت كـ Web App (أي شخص حتى المجهول) وأن اسم الورقة s1.";
+    errorMsg.style.display = "block";
+  }
+
+  btn.disabled = false;
+  btn.textContent = "إرسال الوصف";
+});
+
+// زر تحديث الأعمال
+refreshBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  loadWorks();
+});
+
+// تحميل أولي
+document.addEventListener("DOMContentLoaded", loadWorks);
+</script>
