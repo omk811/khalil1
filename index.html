@@ -24,12 +24,8 @@
     text-align: center;
     color: #4f46e5;
   }
-  .form-group {
-    margin-bottom: 15px;
-  }
-  label {
-    font-weight: bold;
-  }
+  .form-group { margin-bottom: 15px; }
+  label { font-weight: bold; display:block; margin-bottom:5px;}
   input, textarea, select {
     width: 100%;
     padding: 10px;
@@ -47,9 +43,16 @@
     cursor: pointer;
     width: 100%;
   }
-  button:hover {
-    opacity: 0.9;
+  button:hover { opacity: 0.9; }
+  .success-msg, .error-msg {
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+    display: none;
   }
+  .success-msg { background: #c6f6d5; color: #22543d; }
+  .error-msg { background: #fed7d7; color: #742a2a; }
   .student-work {
     background: #f0fff4;
     border: 2px solid #48bb78;
@@ -65,6 +68,15 @@
     text-align: center;
     color: #718096;
     margin-top: 30px;
+  }
+  .refresh-btn {
+    display:inline-block;
+    background:#4f46e5;
+    color:white;
+    padding:8px 15px;
+    border-radius:8px;
+    text-decoration:none;
+    margin-top:10px;
   }
 </style>
 </head>
@@ -107,19 +119,29 @@
     <button type="submit">إرسال الوصف</button>
   </form>
 
+  <div id="successMessage" class="success-msg">✅ تم إرسال وصفك بنجاح!</div>
+  <div id="errorMessage" class="error-msg">⚠️ حدث خطأ أثناء الإرسال. حاول مرة أخرى.</div>
+
   <h2 style="margin-top:40px;">🌟 أعمال الطلاب</h2>
+  <a href="#" id="refreshBtn" class="refresh-btn">🔄 تحديث الأعمال</a>
   <div id="worksContainer" class="empty-state">لم يتم إرسال أي أعمال بعد.</div>
+
+  <div style="text-align:center;margin-top:30px;">
+    <a href="https://docs.google.com/spreadsheets/" target="_blank" style="text-decoration:none;color:#4f46e5;font-weight:bold;">📊 عرض جدول Google Sheet</a>
+  </div>
 </div>
 
 <script>
-const scriptURL = ("https://script.google.com/macros/s/AKfycbzRXwPBDixQVIfhu4IiAIeuJ4-oZ9_0MKqVKHSChNpSnKaH_2CbGHyzYpL_wXBzuquS/exec");
+// 🔗 رابط Google Apps Script الجديد
+const scriptURL = "https://script.google.com/macros/s/AKfycby9r2Lz_qLHjeZP0njaNgOyu0NdZjVblVYcEZk_d6htkwlc3nbA7plPZrmWy9IhjNHH/exec";
 
-
+// تحميل أعمال الطلاب
 async function loadWorks() {
+  const container = document.getElementById("worksContainer");
+  container.innerHTML = "⏳ جارٍ تحميل الأعمال...";
   try {
     const res = await fetch(scriptURL);
     const data = await res.json();
-    const container = document.getElementById("worksContainer");
 
     if (data.length === 0) {
       container.innerHTML = '<div class="empty-state">لم يتم إرسال أي أعمال بعد.</div>';
@@ -134,51 +156,4 @@ async function loadWorks() {
           <div><strong>الشخصية:</strong> ${w.character_name}</div>
           <div><strong>الصفات الجسدية:</strong> ${w.physical_traits}</div>
           <div><strong>الصفات النفسية:</strong> ${w.psychological_traits}</div>
-          ${w.text_evidence ? `<div><strong>الدليل:</strong> ${w.text_evidence}</div>` : ""}
-          <div style="font-size:0.8rem;color:#718096;">📅 ${new Date(w.created_at).toLocaleDateString("ar-SA")}</div>
-        </div>
-      `).join("");
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-document.getElementById("characterForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  const payload = {
-    student_name: studentName.value.trim(),
-    student_class: studentClass.value.trim(),
-    character_name: characterName.value.trim(),
-    physical_traits: physicalTraits.value.trim(),
-    psychological_traits: psychologicalTraits.value.trim(),
-    text_evidence: textEvidence.value.trim()
-  };
-
-  const btn = e.target.querySelector("button");
-  btn.disabled = true;
-  btn.textContent = "جاري الإرسال...";
-
-  try {
-    const res = await fetch(scriptURL, {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "application/json" }
-    });
-    if (res.ok) {
-      alert("✅ تم إرسال وصفك بنجاح!");
-      e.target.reset();
-      loadWorks();
-    } else {
-      alert("حدث خطأ أثناء الإرسال. حاول مرة أخرى.");
-    }
-  } catch {
-    alert("⚠️ تأكد من اتصالك بالإنترنت.");
-  }
-  btn.disabled = false;
-  btn.textContent = "إرسال الوصف";
-});
-
-loadWorks();
-</script>
-</body>
-</html>
+          ${w.text_evidence ? `<div><strong>الدليل:</strong> ${w.tex_
