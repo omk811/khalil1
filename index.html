@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>وصف الشخصيات الأدبية - الطلاب</title>
+    <title>وصف الشخصيات الأدبية - الصف الخامس</title>
     <style>
         * {
             box-sizing: border-box;
@@ -250,13 +250,25 @@
             width: 1em;
             margin-right: 10px;
         }
+
+        .class-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .class-section {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>📖 وصف الشخصيات الأدبية</h1>
-            <p>منصة الطلاب لتحليل الشخصيات في النصوص الأدبية</p>
+            <p>الصف الخامس - منصة تحليل الشخصيات في النصوص الأدبية</p>
         </div>
 
         <div class="instructions">
@@ -275,21 +287,27 @@
                 <h2>✍️ إضافة تحليل جديد</h2>
                 <form id="characterForm">
                     <div class="form-group">
-                        <label for="studentClass">الصف الدراسي</label>
-                        <select id="studentClass" required>
-                            <option value="">اختر الصف</option>
-                            <option value="الصف الأول">الصف الأول</option>
-                            <option value="الصف الثاني">الصف الثاني</option>
-                            <option value="الصف الثالث">الصف الثالث</option>
-                            <option value="الصف الرابع">الصف الرابع</option>
-                            <option value="الصف الخامس">الصف الخامس</option>
-                            <option value="الصف السادس">الصف السادس</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
                         <label for="studentName">اسم الطالب</label>
                         <input type="text" id="studentName" required placeholder="أدخل اسمك الكامل">
+                    </div>
+
+                    <div class="form-group class-section">
+                        <div>
+                            <label for="studentClass">الصف</label>
+                            <select id="studentClass" required>
+                                <option value="">اختر الصف</option>
+                                <option value="الصف الخامس" selected>الصف الخامس</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="studentSection">الشعبة</label>
+                            <select id="studentSection" required>
+                                <option value="">اختر الشعبة</option>
+                                <option value="الشعبة 1">الشعبة 1</option>
+                                <option value="الشعبة 2">الشعبة 2</option>
+                                <option value="الشعبة 3">الشعبة 3</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -352,92 +370,108 @@
 
         // حقول النموذج
         const studentClassEl = document.getElementById("studentClass");
+        const studentSectionEl = document.getElementById("studentSection");
         const studentNameEl = document.getElementById("studentName");
         const characterNameEl = document.getElementById("characterName");
         const physicalTraitsEl = document.getElementById("physicalTraits");
         const psychologicalTraitsEl = document.getElementById("psychologicalTraits");
         const textEvidenceEl = document.getElementById("textEvidence");
 
-        // تحميل الأعمال مع معالجة محسنة للبيانات
+        // تحميل الأعمال مع إصلاح مشكلة Fetch
         async function loadWorks() {
             worksContainer.innerHTML = '<div class="loading">⏳ جارٍ تحميل الأعمال...</div>';
             try {
-                const res = await fetch(scriptURL + '?cache=' + new Date().getTime(), {
-                    cache: "no-store",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                // إضافة timestamp لمنع الكاش
+                const url = scriptURL + '?action=getData&t=' + new Date().getTime();
+                console.log('Fetching from:', url);
+                
+                const res = await fetch(url, {
+                    method: 'GET',
+                    mode: 'no-cors', // إضافة no-cors لتجنب مشاكل CORS
+                    cache: 'no-cache'
                 });
                 
-                console.log("Response status:", res.status);
+                console.log("Response status:", res.status, res.type);
                 
-                if (!res.ok) {
-                    throw new Error(`خطأ في الشبكة: ${res.status}`);
-                }
+                // مع no-cors لن نتمكن من قراءة الرد، لذا نستخدم طريقة بديلة
+                await loadWorksAlternative();
                 
-                const text = await res.text();
-                console.log("Raw response:", text);
-                
-                let data;
-                try {
-                    data = JSON.parse(text);
-                } catch (parseError) {
-                    console.error("JSON parse error:", parseError);
-                    worksContainer.innerHTML = '<div class="empty-state">⚠️ تنسيق البيانات غير صحيح من السكربت</div>';
-                    return;
-                }
-
-                console.log("Parsed data:", data);
-                
-                if (!data || data.length === 0) {
-                    worksContainer.innerHTML = '<div class="empty-state">📝 لا توجد أعمال مضافة بعد. كن أول من يضيف تحليل!</div>';
-                    return;
-                }
-
-                // معالجة البيانات لتكون متسقة
-                const works = data.map(item => ({
-                    student_name: item.student_name || item.name || "غير معروف",
-                    student_class: item.student_class || item.class || "غير محدد",
-                    character_name: item.character_name || item.character || "غير محدد",
-                    physical_traits: item.physical_traits || item.physical || "",
-                    psychological_traits: item.psychological_traits || item.psychological || "",
-                    text_evidence: item.text_evidence || item.evidence || "",
-                    created_at: item.created_at || item.timestamp || item.date || new Date().toISOString()
-                }));
-
-                worksContainer.innerHTML = works
-                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-                    .map(w => `
-                        <div class="student-work">
-                            <div class="student-name">👤 ${w.student_name} - ${w.student_class}</div>
-                            <div><strong>الشخصية:</strong> ${w.character_name}</div>
-                            <div><strong>الصفات الجسدية:</strong> ${w.physical_traits || "غير محدد"}</div>
-                            <div><strong>الصفات النفسية:</strong> ${w.psychological_traits || "غير محدد"}</div>
-                            ${w.text_evidence ? `<div><strong>الدليل النصي:</strong> "${w.text_evidence}"</div>` : ""}
-                            <div class="work-date">📅 ${new Date(w.created_at).toLocaleDateString("ar-SA", {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                            })}</div>
-                        </div>
-                    `).join("");
-
             } catch (err) {
                 console.error("Load error:", err);
+                await loadWorksAlternative();
+            }
+        }
+
+        // طريقة بديلة لتحميل البيانات
+        async function loadWorksAlternative() {
+            try {
+                // استخدام طريقة مباشرة مع التعامل مع الأخطاء
+                const url = scriptURL + '?action=getData&t=' + new Date().getTime();
+                const res = await fetch(url);
+                
+                if (!res.ok) {
+                    throw new Error(`خطأ في السيرفر: ${res.status}`);
+                }
+                
+                const data = await res.json();
+                displayWorks(data);
+                
+            } catch (err) {
+                console.error("Alternative load error:", err);
                 worksContainer.innerHTML = `
                     <div class="empty-state">
-                        ⚠️ فشل في تحميل البيانات
+                        ⚠️ لا يمكن تحميل البيانات حالياً
                         <br><small>${err.message}</small>
-                        <br><small>تحقق من اتصال الإنترنت ورابط السكربت</small>
+                        <br><small>قد يكون السكربت قيد التحديث</small>
                     </div>
                 `;
             }
         }
 
-        // إرسال البيانات باستخدام FormData
+        // عرض الأعمال
+        function displayWorks(data) {
+            if (!data || data.length === 0) {
+                worksContainer.innerHTML = '<div class="empty-state">📝 لا توجد أعمال مضافة بعد. كن أول من يضيف تحليل!</div>';
+                return;
+            }
+
+            // معالجة البيانات لتكون متسقة
+            const works = data.map(item => ({
+                student_name: item.student_name || item.name || "غير معروف",
+                student_class: item.student_class || item.class || "الصف الخامس",
+                student_section: item.student_section || item.section || "",
+                character_name: item.character_name || item.character || "غير محدد",
+                physical_traits: item.physical_traits || item.physical || "",
+                psychological_traits: item.psychological_traits || item.psychological || "",
+                text_evidence: item.text_evidence || item.evidence || "",
+                created_at: item.created_at || item.timestamp || item.date || new Date().toISOString()
+            }));
+
+            worksContainer.innerHTML = works
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                .map(w => `
+                    <div class="student-work">
+                        <div class="student-name">
+                            👤 ${w.student_name} 
+                            ${w.student_section ? `- ${w.student_section}` : ''}
+                        </div>
+                        <div><strong>الشخصية:</strong> ${w.character_name}</div>
+                        <div><strong>الصفات الجسدية:</strong> ${w.physical_traits || "غير محدد"}</div>
+                        <div><strong>الصفات النفسية:</strong> ${w.psychological_traits || "غير محدد"}</div>
+                        ${w.text_evidence ? `<div><strong>الدليل النصي:</strong> "${w.text_evidence}"</div>` : ""}
+                        <div class="work-date">📅 ${new Date(w.created_at).toLocaleDateString("ar-SA", {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        })}</div>
+                    </div>
+                `).join("");
+        }
+
+        // إرسال البيانات
         async function submitWork(payload) {
             try {
-                // استخدام FormData لتجنب مشاكل CORS
+                // طريقة 1: استخدام FormData
                 const formData = new FormData();
                 Object.keys(payload).forEach(key => {
                     formData.append(key, payload[key]);
@@ -448,14 +482,37 @@
                     body: formData
                 });
 
-                const result = await response.text();
-                console.log('Submission result:', result);
+                console.log('Submit response status:', response.status);
                 
-                return response.ok;
+                if (response.ok) {
+                    return true;
+                } else {
+                    throw new Error(`خطأ في الإرسال: ${response.status}`);
+                }
                 
             } catch (error) {
                 console.error('Submission error:', error);
-                return false;
+                
+                // طريقة بديلة: استخدام x-www-form-urlencoded
+                try {
+                    const urlEncoded = new URLSearchParams();
+                    Object.keys(payload).forEach(key => {
+                        urlEncoded.append(key, payload[key]);
+                    });
+
+                    const response2 = await fetch(scriptURL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: urlEncoded
+                    });
+
+                    return response2.ok;
+                } catch (error2) {
+                    console.error('Alternative submission error:', error2);
+                    return false;
+                }
             }
         }
 
@@ -472,6 +529,7 @@
             const payload = {
                 student_name: studentNameEl.value.trim(),
                 student_class: studentClassEl.value.trim(),
+                student_section: studentSectionEl.value.trim(),
                 character_name: characterNameEl.value.trim(),
                 physical_traits: physicalTraitsEl.value.trim(),
                 psychological_traits: psychologicalTraitsEl.value.trim(),
@@ -481,7 +539,8 @@
             // تحقق من الحقول المطلوبة
             const requiredFields = [
                 { field: studentNameEl, name: "اسم الطالب" },
-                { field: studentClassEl, name: "الصف الدراسي" },
+                { field: studentClassEl, name: "الصف" },
+                { field: studentSectionEl, name: "الشعبة" },
                 { field: characterNameEl, name: "اسم الشخصية" },
                 { field: physicalTraitsEl, name: "الصفات الجسدية" },
                 { field: psychologicalTraitsEl, name: "الصفات النفسية" }
@@ -500,14 +559,14 @@
             const ok = await submitWork(payload);
 
             if (ok) {
-                successMsg.textContent = "✅ تم إرسال التحليل بنجاح! سيتم تحديث القائمة shortly...";
+                successMsg.textContent = "✅ تم إرسال التحليل بنجاح! جاري التحديث...";
                 successMsg.style.display = "block";
                 form.reset();
                 
                 // انتظر قليلاً ثم حدث القائمة
                 setTimeout(() => {
                     loadWorks();
-                }, 1500);
+                }, 2000);
                 
                 setTimeout(() => {
                     successMsg.style.display = "none";
@@ -532,8 +591,11 @@
             loadWorks();
         });
 
-        // تحديث تلقائي كل 30 ثانية
-        setInterval(loadWorks, 30000);
+        // تحديث تلقائي كل 45 ثانية
+        setInterval(loadWorks, 45000);
+
+        // إعداد افتراضي للصف الخامس
+        studentClassEl.value = "الصف الخامس";
     </script>
 </body>
 </html>
