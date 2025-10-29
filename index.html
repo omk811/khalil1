@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>درس وصف الشخصية</title>
+<style>
+  body {
+    font-family: "Cairo", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0;
+    padding: 20px;
+    color: #2d3748;
+  }
+  .container {
+    max-width: 900px;
+    margin: auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  h1 {
+    text-align: center;
+    color: #4f46e5;
+  }
+  .form-group {
+    margin-bottom: 15px;
+  }
+  label {
+    font-weight: bold;
+  }
+  input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: inherit;
+  }
+  button {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+  }
+  button:hover {
+    opacity: 0.9;
+  }
+  .student-work {
+    background: #f0fff4;
+    border: 2px solid #48bb78;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+  }
+  .student-name {
+    font-weight: bold;
+    color: #2f855a;
+  }
+  .empty-state {
+    text-align: center;
+    color: #718096;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🖋️ درس: وصف الشخصية</h1>
+  <p style="text-align:center;">إعداد: <strong>الأستاذ خليل البلوشي</strong> – الصف الخامس الأساسي</p>
+  
+  <h2>✍️ النشاط التطبيقي</h2>
+  <form id="characterForm">
+    <div class="form-group">
+      <label>الشعبة:</label>
+      <select id="studentClass" required>
+        <option value="">اختر الشعبة</option>
+        <option>الخامس - 1</option>
+        <option>الخامس - 2</option>
+        <option>الخامس - 3</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>اسم الطالب:</label>
+      <input type="text" id="studentName" placeholder="اكتب اسمك هنا..." required />
+    </div>
+    <div class="form-group">
+      <label>اسم الشخصية:</label>
+      <input type="text" id="characterName" placeholder="مثال: والدي، فاطمة، أحمد..." required />
+    </div>
+    <div class="form-group">
+      <label>الصفات الجسدية (المادية):</label>
+      <textarea id="physicalTraits" placeholder="مثال: طويل القامة، له شعر أسود..." required></textarea>
+    </div>
+    <div class="form-group">
+      <label>الصفات النفسية (المعنوية):</label>
+      <textarea id="psychologicalTraits" placeholder="مثال: كريم، صبور، ذكي..." required></textarea>
+    </div>
+    <div class="form-group">
+      <label>الأدلة أو المواقف:</label>
+      <textarea id="textEvidence" placeholder="مثال: ساعد زملاءه في الصف..."></textarea>
+    </div>
+    <button type="submit">إرسال الوصف</button>
+  </form>
+
+  <h2 style="margin-top:40px;">🌟 أعمال الطلاب</h2>
+  <div id="worksContainer" class="empty-state">لم يتم إرسال أي أعمال بعد.</div>
+</div>
+
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbxV653RkIP7wmk72kS1GAhpEeLGWox_-DAOxcAVQmDW8e4Lp14M-SvcWoLivI8PTtJr/exec";
+
+async function loadWorks() {
+  try {
+    const res = await fetch(scriptURL);
+    const data = await res.json();
+    const container = document.getElementById("worksContainer");
+
+    if (data.length === 0) {
+      container.innerHTML = '<div class="empty-state">لم يتم إرسال أي أعمال بعد.</div>';
+      return;
+    }
+
+    container.innerHTML = data
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      .map(w => `
+        <div class="student-work">
+          <div class="student-name">👤 ${w.student_name} - ${w.student_class}</div>
+          <div><strong>الشخصية:</strong> ${w.character_name}</div>
+          <div><strong>الصفات الجسدية:</strong> ${w.physical_traits}</div>
+          <div><strong>الصفات النفسية:</strong> ${w.psychological_traits}</div>
+          ${w.text_evidence ? `<div><strong>الدليل:</strong> ${w.text_evidence}</div>` : ""}
+          <div style="font-size:0.8rem;color:#718096;">📅 ${new Date(w.created_at).toLocaleDateString("ar-SA")}</div>
+        </div>
+      `).join("");
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+document.getElementById("characterForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const payload = {
+    student_name: studentName.value.trim(),
+    student_class: studentClass.value.trim(),
+    character_name: characterName.value.trim(),
+    physical_traits: physicalTraits.value.trim(),
+    psychological_traits: psychologicalTraits.value.trim(),
+    text_evidence: textEvidence.value.trim()
+  };
+
+  const btn = e.target.querySelector("button");
+  btn.disabled = true;
+  btn.textContent = "جاري الإرسال...";
+
+  try {
+    const res = await fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: { "Content-Type": "application/json" }
+    });
+    if (res.ok) {
+      alert("✅ تم إرسال وصفك بنجاح!");
+      e.target.reset();
+      loadWorks();
+    } else {
+      alert("حدث خطأ أثناء الإرسال. حاول مرة أخرى.");
+    }
+  } catch {
+    alert("⚠️ تأكد من اتصالك بالإنترنت.");
+  }
+  btn.disabled = false;
+  btn.textContent = "إرسال الوصف";
+});
+
+loadWorks();
+</script>
+</body>
+</html>
